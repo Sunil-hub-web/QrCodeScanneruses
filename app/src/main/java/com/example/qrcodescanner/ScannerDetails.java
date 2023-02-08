@@ -3,12 +3,18 @@ package com.example.qrcodescanner;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +46,10 @@ public class ScannerDetails extends AppCompatActivity {
             full_name, statuesApi = "https://smeconsulting.in/sw/Home/updateqr", room_no, name,
             dateMyFormat,currentDate;
 
-    TextView qrcodeNo, qrName, qrMobileNo, qrDate, qrStatues, roomno, qrcodefor;
+    TextView qrName, qrMobileNo, qrDate, qrStatues, roomno, qrcodefor,txtstatus;
+    ImageView img_back;
+
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,24 +61,21 @@ public class ScannerDetails extends AppCompatActivity {
 
         // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        sessionManager = new SessionManager(ScannerDetails.this);
 
         btn_UseMe = findViewById(R.id.btn_UseMe);
-        qrcodeNo = findViewById(R.id.qrcodeNo);
+        txtstatus = findViewById(R.id.status);
         qrName = findViewById(R.id.qrName);
         qrMobileNo = findViewById(R.id.qrMobileNo);
         qrDate = findViewById(R.id.qrDate);
         qrStatues = findViewById(R.id.qrStatues);
         roomno = findViewById(R.id.roomno);
         qrcodefor = findViewById(R.id.qrcodefor);
+        img_back = findViewById(R.id.img_back);
 
         QrcodeNo = getIntent().getStringExtra("QrcodeNo");
 
-        SharedPreferences sp = getSharedPreferences("details", MODE_PRIVATE);
-
-        id = sp.getString("id", null);
-        full_name = sp.getString("full_name", null);
-        user_name = sp.getString("user_name", null);
-        contact_no = sp.getString("contact_no", null);
+        id = sessionManager.getSubcatId();
 
         scannerDetails(QrcodeNo);
 
@@ -77,14 +83,16 @@ public class ScannerDetails extends AppCompatActivity {
 
             if (qrStatues.getText().toString().trim().equals("New")) {
 
-                updateStatues(id, "1", generate_no);
-
-            } else {
-
                 updateStatues(id, "0", generate_no);
+
             }
 
-            startActivity(new Intent(ScannerDetails.this, SuccessFullyScreen.class));
+
+        });
+
+        img_back.setOnClickListener(view -> {
+
+            startActivity(new Intent(ScannerDetails.this,LoginActivity.class));
         });
     }
 
@@ -127,7 +135,7 @@ public class ScannerDetails extends AppCompatActivity {
                             name = jsonObject_data.getString("name");
                             status_va = jsonObject_data.getString("status");
 
-                            qrcodeNo.setText(generate_no);
+                            //qrcodeNo.setText(generate_no);
                             qrName.setText(main_guest_name);
                             qrMobileNo.setText(main_guest_phone);
                             roomno.setText(room_no);
@@ -151,6 +159,7 @@ public class ScannerDetails extends AppCompatActivity {
                             if (status_va.equals("0")) {
 
                                 qrStatues.setText("Already used");
+                                txtstatus.setText("Already used");
                                 qrStatues.setTextColor(Color.RED);
                                 startActivity(new Intent(ScannerDetails.this,ErrorMessageShow.class));
                                 btn_UseMe.setEnabled(false);
@@ -168,6 +177,8 @@ public class ScannerDetails extends AppCompatActivity {
 
                             } else {
 
+                                txtstatus.setText("not used");
+
                                 if(dateMyFormat.equals(currentDate)){
 
                                     qrStatues.setText("New");
@@ -180,6 +191,8 @@ public class ScannerDetails extends AppCompatActivity {
                                     qrStatues.setText("Invalide Date");
                                     qrStatues.setTextColor(Color.GREEN);
                                     btn_UseMe.setEnabled(false);
+
+                                    invalideDate_Dialog();
                                 }
                             }
 
@@ -274,6 +287,31 @@ public class ScannerDetails extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(ScannerDetails.this);
         requestQueue.getCache().clear();
         requestQueue.add(stringRequest);
+
+    }
+
+    public void invalideDate_Dialog(){
+
+        Dialog dialog = new Dialog(ScannerDetails.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.invalidedatedialog);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.CENTER;
+        dialog.getWindow().setAttributes(lp);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        Button btn_No = dialog.findViewById(R.id.btn_No);
+
+        btn_No.setOnClickListener(view -> {
+
+            dialog.dismiss();
+        });
+
+        dialog.show();
 
     }
 }

@@ -15,6 +15,9 @@ public class ErrorMessageShow extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_error_message_show);
 
+        getSupportActionBar().hide();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         btn_backToHome = findViewById(R.id.btn_backToHome);
 
         btn_backToHome.setOnClickListener(view -> {

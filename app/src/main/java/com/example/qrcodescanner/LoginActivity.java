@@ -118,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                             sessionManager.setUserFullName(full_name);
                             sessionManager.setUserName(user_name);
                             sessionManager.setUserMobileNO(contact_no);
+                            sessionManager.setSubcatId(id);
 
 
                             startActivity(new Intent(LoginActivity.this,MainActivity.class));
@@ -170,5 +171,15 @@ public class LoginActivity extends AppCompatActivity {
         requestQueue.getCache().clear();
         requestQueue.add(stringRequest);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (sessionManager.isLogin()){
+
+            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+        }
     }
 }
