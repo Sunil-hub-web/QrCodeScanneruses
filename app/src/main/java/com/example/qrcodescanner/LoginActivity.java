@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText edit_MobileNo,edit_Password;
     SessionManager sessionManager;
 
-    String loginApi = "https://smeconsulting.in/sw/Home/Applogin",full_name,user_name,password1,contact_no,status_va,id;
+    String loginApi = "https://smeconsulting.in/Home/Applogin",full_name,user_name,password1,contact_no,status_va,id;
 
 
     @Override

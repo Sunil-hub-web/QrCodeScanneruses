@@ -41,9 +41,9 @@ import java.util.Map;
 public class ScannerDetails extends AppCompatActivity {
 
     Button btn_UseMe;
-    String scannerApi = "https://smeconsulting.in/sw/Home/scanqr", qrcode_id, main_guest_name,
+    String scannerApi = "https://silverresorts.in/Home/scanqr", qrcode_id, main_guest_name,
             main_guest_phone, generate_no, use_date, status_va, QrcodeNo, contact_no, user_name, id,
-            full_name, statuesApi = "https://smeconsulting.in/sw/Home/updateqr", room_no, name,
+            full_name, statuesApi = "https://silverresorts.in/Home/updateqr", room_no, name,
             dateMyFormat,currentDate;
 
     TextView qrName, qrMobileNo, qrDate, qrStatues, roomno, qrcodefor,txtstatus;
