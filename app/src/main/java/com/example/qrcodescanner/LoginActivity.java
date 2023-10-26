@@ -8,6 +8,7 @@ import android.app.UiModeManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -35,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText edit_MobileNo,edit_Password;
     SessionManager sessionManager;
 
-    String loginApi = "https://smeconsulting.in/Home/Applogin",full_name,user_name,password1,contact_no,status_va,id;
+    String loginApi = "https://silverresorts.in/Home/Applogin",full_name,user_name,password1,contact_no,status_va,id;
 
 
     @Override
@@ -152,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
 
                 progressDialog.dismiss();
-                Toast.makeText(LoginActivity.this, ""+error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }){
 
@@ -162,6 +163,8 @@ public class LoginActivity extends AppCompatActivity {
                 Map<String,String> params = new HashMap<>();
                 params.put("username",userid);
                 params.put("Password",password);
+
+                Log.d("parameterslogin",userid +" "+ password);
                 return params;
             }
         };
