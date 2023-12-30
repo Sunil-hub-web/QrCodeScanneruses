@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -44,9 +45,9 @@ public class ScannerDetails extends AppCompatActivity {
     String scannerApi = "https://silverresorts.in/Home/scanqr", qrcode_id, main_guest_name,
             main_guest_phone, generate_no, use_date, status_va, QrcodeNo, contact_no, user_name, id,
             full_name, statuesApi = "https://silverresorts.in/Home/updateqr", room_no, name,
-            dateMyFormat,currentDate;
+            dateMyFormat,currentDate, updated_date, scaned_by;
 
-    TextView qrName, qrMobileNo, qrDate, qrStatues, roomno, qrcodefor,txtstatus;
+    TextView qrName, qrMobileNo, qrDate, qrStatues, roomno, qrcodefor,txtstatus,scanedby,updateddate;
     ImageView img_back;
 
     SessionManager sessionManager;
@@ -72,6 +73,8 @@ public class ScannerDetails extends AppCompatActivity {
         roomno = findViewById(R.id.roomno);
         qrcodefor = findViewById(R.id.qrcodefor);
         img_back = findViewById(R.id.img_back);
+        scanedby = findViewById(R.id.scaned_by);
+        updateddate = findViewById(R.id.updated_date);
 
         QrcodeNo = getIntent().getStringExtra("QrcodeNo");
 
@@ -92,7 +95,7 @@ public class ScannerDetails extends AppCompatActivity {
 
         img_back.setOnClickListener(view -> {
 
-            startActivity(new Intent(ScannerDetails.this,LoginActivity.class));
+            startActivity(new Intent(ScannerDetails.this,MainActivity.class));
         });
     }
 
@@ -134,6 +137,33 @@ public class ScannerDetails extends AppCompatActivity {
                             use_date = jsonObject_data.getString("use_date");
                             name = jsonObject_data.getString("name");
                             status_va = jsonObject_data.getString("status");
+                            updated_date = jsonObject_data.getString("updated_date");
+                            scaned_by = jsonObject_data.getString("scaned_by");
+
+                            if (scaned_by.equals("null")){
+                                scanedby.setText("");
+                            }else{
+                                scanedby.setText(scaned_by);
+                            }
+
+                            if (updated_date.equals("null")){
+                                updateddate.setText("");
+                            }else{
+
+
+                                SimpleDateFormat fromUser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+                                try {
+                                    Date dateFromUser = fromUser.parse(updated_date); // Parse it to the exisitng date pattern and return Date type
+                                    dateMyFormat = myFormat.format(dateFromUser); // format it to the date pattern you prefer
+                                    updateddate.setText(dateMyFormat);;
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+
 
                             //qrcodeNo.setText(generate_no);
                             qrName.setText(main_guest_name);
@@ -141,11 +171,14 @@ public class ScannerDetails extends AppCompatActivity {
                             roomno.setText(room_no);
                             qrcodefor.setText(name);
 
-                            use_date = use_date.replace(" 00:00:00", "");
+                            btn_UseMe.setVisibility(View.VISIBLE);
+
+                            //use_date = use_date.replace("00:00:00", "");
 
 
-                            SimpleDateFormat fromUser = new SimpleDateFormat("yyyy-MM-dd");
-                            SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy");
+                            SimpleDateFormat fromUser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
                             try {
                                 Date dateFromUser = fromUser.parse(use_date); // Parse it to the exisitng date pattern and return Date type
                                 dateMyFormat = myFormat.format(dateFromUser); // format it to the date pattern you prefer
@@ -158,11 +191,12 @@ public class ScannerDetails extends AppCompatActivity {
 
                             if (status_va.equals("0")) {
 
-                                qrStatues.setText("Already used");
+                               // qrStatues.setText("Already used");
                                 txtstatus.setText("Already used");
-                                qrStatues.setTextColor(Color.RED);
-                                startActivity(new Intent(ScannerDetails.this,ErrorMessageShow.class));
+                               // qrStatues.setTextColor(Color.RED);
+                                //startActivity(new Intent(ScannerDetails.this,ErrorMessageShow.class));
                                 btn_UseMe.setEnabled(false);
+                                btn_UseMe.setVisibility(View.INVISIBLE);
 
                               /*  if(dateMyFormat.equals(currentDate)){
 
@@ -181,16 +215,18 @@ public class ScannerDetails extends AppCompatActivity {
 
                                 if(dateMyFormat.equals(currentDate)){
 
-                                    qrStatues.setText("New");
-                                    qrStatues.setTextColor(Color.GREEN);
+                                   // qrStatues.setText("New");
+                                    //qrStatues.setTextColor(Color.GREEN);
                                     btn_UseMe.setEnabled(true);
+                                    btn_UseMe.setVisibility(View.VISIBLE);
 
                                 }else{
 
                                    // startActivity(new Intent(ScannerDetails.this,ErrorMessageShow.class));
-                                    qrStatues.setText("Invalide Date");
-                                    qrStatues.setTextColor(Color.GREEN);
+                                   // qrStatues.setText("Invalide Date");
+                                   // qrStatues.setTextColor(Color.GREEN);
                                     btn_UseMe.setEnabled(false);
+                                    btn_UseMe.setVisibility(View.INVISIBLE);
 
                                     invalideDate_Dialog();
                                 }

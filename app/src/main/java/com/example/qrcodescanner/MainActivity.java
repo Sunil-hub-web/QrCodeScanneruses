@@ -14,12 +14,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
 
     Button btn_ScannClass;
     public static TextView showTextView;
     String full_name,user_name,password1,contact_no,status_va,id;
-    TextView text_Name,text_MobileNo;
+    TextView text_Name,text_MobileNo,text_DateTime;
     ImageView img_Logout,img_ChangePassword;
 
     SessionManager sessionManager;
@@ -47,9 +53,14 @@ public class MainActivity extends AppCompatActivity {
         showTextView = findViewById(R.id.showTextView);
         text_Name = findViewById(R.id.text_Name);
         text_MobileNo = findViewById(R.id.text_MobileNo);
+        text_DateTime = findViewById(R.id.text_DateTime);
 
         text_MobileNo.setText(contact_no);
         text_Name.setText(full_name);
+        DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
+        String date = df.format(Calendar.getInstance().getTime());
+        String currentDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
+        text_DateTime.setText(currentDate);
 
         btn_ScannClass.setOnClickListener(new View.OnClickListener() {
             @Override

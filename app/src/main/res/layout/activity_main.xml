@@ -65,7 +65,21 @@
         android:textColor="@color/black"
         android:textStyle="bold"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="10dp">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/text_DateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/text_MobileNo"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp">
 
     </TextView>
 
@@ -73,7 +87,7 @@
         android:id="@+id/btn_ScannClass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/text_MobileNo"
+        android:layout_below="@id/text_DateTime"
         android:layout_centerInParent="true"
         android:layout_marginTop="50dp"
         android:background="@drawable/backgroundservices"
