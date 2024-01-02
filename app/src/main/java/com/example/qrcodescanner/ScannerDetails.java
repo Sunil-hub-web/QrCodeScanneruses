@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,7 @@ public class ScannerDetails extends AppCompatActivity {
     String scannerApi = "https://silverresorts.in/Home/scanqr", qrcode_id, main_guest_name,
             main_guest_phone, generate_no, use_date, status_va, QrcodeNo, contact_no, user_name, id,
             full_name, statuesApi = "https://silverresorts.in/Home/updateqr", room_no, name,
-            dateMyFormat,currentDate, updated_date, scaned_by;
+            dateMyFormat,currentDate, updated_date, scaned_by, dateMyFormat1;
 
     TextView qrName, qrMobileNo, qrDate, qrStatues, roomno, qrcodefor,txtstatus,scanedby,updateddate;
     ImageView img_back;
@@ -176,13 +177,24 @@ public class ScannerDetails extends AppCompatActivity {
                             //use_date = use_date.replace("00:00:00", "");
 
 
-                            SimpleDateFormat fromUser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                            SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                            SimpleDateFormat fromUser = new SimpleDateFormat("yyyy-MM-dd");
+                            SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy");
 
                             try {
                                 Date dateFromUser = fromUser.parse(use_date); // Parse it to the exisitng date pattern and return Date type
                                 dateMyFormat = myFormat.format(dateFromUser); // format it to the date pattern you prefer
                                 qrDate.setText(dateMyFormat);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            SimpleDateFormat fromUser1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            SimpleDateFormat myFormat1 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+                            try {
+                                Date dateFromUser = fromUser1.parse(use_date); // Parse it to the exisitng date pattern and return Date type
+                                dateMyFormat1 = myFormat1.format(dateFromUser); // format it to the date pattern you prefer
+                                qrDate.setText(dateMyFormat1);
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
@@ -256,6 +268,7 @@ public class ScannerDetails extends AppCompatActivity {
 
                 Map<String, String> params = new HashMap<>();
                 params.put("qrcode", scannerId);
+                Log.d("parameters",params.toString());
                 return params;
             }
         };
